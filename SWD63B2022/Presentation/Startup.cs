@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Interfaces;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +19,8 @@ namespace Presentation
     {
         public Startup(IConfiguration configuration)
         {
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\attar\Downloads\swd63b2022-d3dfe8c1cb5a.json");
+
             Configuration = configuration;
         }
 
@@ -45,6 +49,12 @@ namespace Presentation
             services.AddRazorPages();
 
             services.AddControllersWithViews();
+
+            string projectName = Configuration["project"] ;
+
+            services.AddScoped<IFireStoreDataAccess, FireStoreDataAccess>(x=> {
+                return new FireStoreDataAccess(projectName);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
