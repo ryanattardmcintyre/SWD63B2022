@@ -35,5 +35,27 @@ namespace Presentation.Controllers
             fireStore.AddUser(user);
             return RedirectToAction("Index");
         }
+
+        [HttpGet][Authorize]
+        public IActionResult Send( )
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task< IActionResult> Send(Message msg)
+        {
+            msg.Id = Guid.NewGuid().ToString();
+           await fireStore.SendMessage(User.Claims.ElementAt(4).Value, msg);
+            return RedirectToAction("List");
+        }
+       
+        [Authorize]
+        public async Task<IActionResult> List()
+        {
+            var messages = await fireStore.GetMessages(User.Claims.ElementAt(4).Value);
+            return View(messages);
+        }
     }
 }

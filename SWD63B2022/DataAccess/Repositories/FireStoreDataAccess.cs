@@ -35,14 +35,33 @@ namespace DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Message> GetMessages(string email)
+        public async Task<List<Message>> GetMessages(string email)
         {
-            throw new NotImplementedException();
+            // users >> ryanattard@gmail.com >> messages 
+
+            if ((await GetUser(email)) == null) return new List<Message>(); //if user does not exist return an empty list
+
+            Query messageQuery = db.Collection("users").Document(email).Collection("messages");
+            QuerySnapshot messageQuerySnapshot = await messageQuery.GetSnapshotAsync();
+            
+            List<Message> messages = new List<Message>();
+
+             
+            foreach (DocumentSnapshot documentSnapshot in messageQuerySnapshot.Documents)
+            {
+                messages.Add(documentSnapshot.ConvertTo<Message>());
+            }
+
+            return messages;
+
         }
 
-        public void SendMessage(string email, Message msg)
+        public async Task<WriteResult> SendMessage(string email, Message msg)
         {
-            throw new NotImplementedException();
+            DocumentReference docRef = db.Collection("users").Document(email).Collection("messages").Document(msg.Id);
+            
+            return await docRef.SetAsync(msg);
+
         }
 
         public void UpdateUser(User user)

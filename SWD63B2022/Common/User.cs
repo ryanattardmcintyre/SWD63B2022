@@ -25,8 +25,10 @@ namespace Common
     {
         [FirestoreProperty]
         public string Id { get; set; }
-        [FirestoreProperty]
-        public string DateSet { get; set; }
+        
+        [FirestoreProperty, ServerTimestamp]
+        public Google.Cloud.Firestore.Timestamp DateSent { get; set; }
+
         [FirestoreProperty]
         public string Recipient { get; set; }
         [FirestoreProperty]

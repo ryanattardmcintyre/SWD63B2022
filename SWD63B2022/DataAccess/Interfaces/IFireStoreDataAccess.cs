@@ -1,4 +1,5 @@
 ﻿using Common;
+using Google.Cloud.Firestore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace DataAccess.Interfaces
         void AddUser(User user);
         void UpdateUser(User user);
 
-        void SendMessage(string email, Message msg);
+        Task<WriteResult> SendMessage(string email, Message msg);
 
-        List<Message> GetMessages(string email);
+        Task<List<Message>> GetMessages(string email);
         void DeleteUser(string email);
 
     }
