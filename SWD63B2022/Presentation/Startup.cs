@@ -55,6 +55,12 @@ namespace Presentation
             services.AddScoped<IFireStoreDataAccess, FireStoreDataAccess>(x=> {
                 return new FireStoreDataAccess(projectName);
             });
+            
+            string redis= Configuration["redis_connectionstring"]; 
+
+            services.AddScoped<ICacheRepository, CacheRepository>(x => {
+                return new CacheRepository(redis);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

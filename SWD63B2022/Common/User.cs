@@ -33,5 +33,8 @@ namespace Common
         public string Recipient { get; set; }
         [FirestoreProperty]
         public string Text { get; set; }
+
+        [FirestoreProperty]
+        public string Attachment { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject DataAccess.Interfaces.ICacheRepository CacheRepo
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,26 +17,30 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @{ 
+                    var myMenus = CacheRepo.GetMenus().OrderBy(x=>x.Order);
+                }
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
+                        @foreach(var menu in myMenus)
+                        {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" href="@menu.Link">@menu.Text</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        }
                     </ul>
                 </div>
 
                 <div class="justify-content-end">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <span>@User.Identity.Name</span>  @*<span>@User.Claims.ElementAt(4).Value</span>*@
+                        <span>@User.Identity.Name</span> @*<span>@User.Claims.ElementAt(4).Value</span>*@
                         <a href="/Home/logout">Log out</a>
                     }
                     else
                     {
-                        <a href="/Home/LogIn" >Log In</a>
+                        <a href="/Home/LogIn">Log In</a>
                     }
                 </div>
 
