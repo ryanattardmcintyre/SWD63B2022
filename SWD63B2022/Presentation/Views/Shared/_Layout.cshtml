@@ -1,4 +1,4 @@
-﻿@inject DataAccess.Interfaces.ICacheRepository CacheRepo
+﻿@*@inject DataAccess.Interfaces.ICacheRepository CacheRepo*@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,18 +17,18 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @{ 
+                @*@{ 
                     var myMenus = CacheRepo.GetMenus().OrderBy(x=>x.Order);
-                }
+                }*@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        @foreach(var menu in myMenus)
+                        @*@foreach(var menu in myMenus)
                         {
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="@menu.Link">@menu.Text</a>
                         </li>
-                        }
+                        }*@
                     </ul>
                 </div>
 

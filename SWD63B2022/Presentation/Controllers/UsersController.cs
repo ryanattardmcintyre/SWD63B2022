@@ -16,8 +16,10 @@ namespace Presentation.Controllers
     public class UsersController : Controller
     {
         private IFireStoreDataAccess fireStore;
-        public UsersController(IFireStoreDataAccess _fireStore)
+        private IPubsubRepository pubsub;
+        public UsersController(IFireStoreDataAccess _fireStore, IPubsubRepository _pubsub)
         {
+            pubsub = _pubsub;
             fireStore = _fireStore;
         }
 
@@ -97,6 +99,15 @@ namespace Presentation.Controllers
             }
             msg.Id = id; //if we were going to allow for more than 1 attachment, ids should be unique 
            await fireStore.SendMessage(User.Claims.ElementAt(4).Value, msg);
+
+            await pubsub.Publish(msg); 
+            //1. queue the message in the topic 
+            //2. it will trigger a cloud function which will connect with an email api and sends msg
+
+
+
+
+
             return RedirectToAction("List");
         }
        
