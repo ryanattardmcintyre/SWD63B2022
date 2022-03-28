@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,25 @@ namespace Presentation.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IExceptionLogger _googleExceptionLogger;
+        public HomeController(ILogger<HomeController> logger, [FromServices] IExceptionLogger exceptionLogger )
         {
             _logger = logger;
+            _googleExceptionLogger = exceptionLogger;
         }
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Accessed the Index method");
+
+            try
+            {
+                throw new Exception("Demonstrating error reporting");
+            }
+            catch (Exception ex)
+            {
+                _googleExceptionLogger.Log(ex);
+            }
             return View();
         }
 
